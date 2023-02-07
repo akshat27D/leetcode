@@ -21,32 +21,25 @@
  */
 class Solution {
 public:
-       static TreeNode* sortedListToBST(const ListNode* head) {
-        return sortedListToBST(head, 0, listSize(head));
-    }
-
-    static int listSize(const ListNode* head) {
-        int length = 0;
-        while (head) {
-            head = head->next;
-            ++length;
+    TreeNode* vtobst(int s , int e ,vector<int> &v){
+        if(s>e){
+            return NULL;
         }
-        return length;
-    }
-
-    static TreeNode* sortedListToBST(const ListNode*& node, int b, int e) {
-        if (b == e) return nullptr;
+        int mid = (s+e)/2;
+        TreeNode* root = new TreeNode(v[mid]);
+        root->left= vtobst(s,mid-1,v);
+        root->right = vtobst(mid+1,e,v);
+        return root;
         
-        const int mid = b + (e - b) / 2;
-
-        // Construct the left sub-tree.
-        TreeNode* left = sortedListToBST(node, b, mid);
-        // Consume the next node in the list.
-        const int val = node->val;
-        node = node->next;
-        // Construct the right sub-tree.		
-        TreeNode* right = sortedListToBST(node, mid + 1, e);
-
-        return new TreeNode(val, left, right);
+    }
+    TreeNode* sortedListToBST(ListNode* head) {
+        vector<int> v;
+        while(head!=NULL){
+            v.push_back(head->val);
+            head  = head->next;
+            
+        }
+        return vtobst(0,v.size()-1,v);
+        
     }
 };
